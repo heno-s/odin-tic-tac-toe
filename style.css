@@ -39,7 +39,6 @@ form {
     flex-direction: column;
     align-items: center;
     gap: 30px;
-    display: none;
 }
 
 .player-setup {
@@ -144,4 +143,8 @@ label {
     border: 1px solid #000;
     border-radius: 5px;
     box-shadow: 1px 1px #000;
+}
+
+.hide {
+    display: none;
 }
