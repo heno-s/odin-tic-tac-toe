@@ -19,12 +19,12 @@ form.addEventListener("submit", (evt) => {
     const player1 = {
         name: form.player1Name.value,
         symbol: form.player1Symbol.value,
-        id: "1",
+        id: form.player1Id.value,
     };
     const player2 = {
         name: form.player2Name.value,
         symbol: form.player2Symbol.value,
-        id: "2",
+        id: form.player2Id.value,
     };
     game.init(player1, player2);
 });
@@ -78,8 +78,10 @@ const displayController = (function () {
     }
 
     function init(player1, player2) {
-        const scoreboard1 = document.querySelector("#p1");
-        const scoreboard2 = document.querySelector("#p2");
+        const [scoreboard1, scoreboard2] =
+            document.querySelectorAll(".scoreboard");
+        scoreboard1.id = `p${player1.id}`;
+        scoreboard2.id = `p${player2.id}`;
 
         scoreboard1.querySelector(".name").textContent = player1.name;
         scoreboard1.querySelector("[data-score]").textContent = "0";
