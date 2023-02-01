@@ -32,10 +32,22 @@ const displayController = (function () {
     return { placeSymbol };
 })();
 
-const player = {
-    getSymbol() {
-        return "x";
-    },
-};
+function playerFactory(name, symbol) {
+    const _score = 0;
 
-displayController.placeSymbol(player, 1);
+    function getName() {
+        return name;
+    }
+
+    function getSymbol() {
+        return symbol;
+    }
+
+    function getScore() {
+        return _score;
+    }
+
+    return { getName, getSymbol, getScore };
+}
+
+const player1 = playerFactory("John", "x");
