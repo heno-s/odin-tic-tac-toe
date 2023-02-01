@@ -4,4 +4,27 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: #fff;
+}
+
+html {
+    --primary-color: #0f6666;
+    font-family: sans-serif;
+}
+
+input:focus {
+    outline: none;
+}
+
+body {
+    background-color: #595a53;
+}
+
+header {
+    background-color: #232422;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 1em;
+    box-shadow: 0 3px 10px;
+    text-shadow: 0px 0px 10px;
 }
