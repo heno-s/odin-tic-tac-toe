@@ -9,6 +9,7 @@
 
 html {
     --primary-color: #0f6666;
+    --secondary-color: #999;
     font-family: sans-serif;
 }
 
@@ -64,11 +65,19 @@ form {
     position: absolute;
 }
 
+.symbol input:checked + label {
+    background-color: var(--secondary-color);
+}
+
 .symbol label {
     background-color: var(--primary-color);
     border: 1px solid #000;
     padding: 8px 40px;
     border-radius: 5px;
+}
+
+.symbol label:hover {
+    background-color: var(--secondary-color);
 }
 
 .submit {
