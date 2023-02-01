@@ -16,24 +16,32 @@ const gameboard = (function () {
 })();
 
 const displayController = (function () {
-    const gameboard_DOM = document.querySelector(".gameboard");
+    const gameboardDOM = document.querySelector(".gameboard");
 
     function placeSymbol(player, index) {
-        console.log(gameboard);
         if (!gameboard.placeSymbol(player, index)) {
             return null;
         }
-        const tile = gameboard_DOM.querySelector(
+        const tile = gameboardDOM.querySelector(
             `[data-index="${index}"]`
         );
         tile.textContent = player.getSymbol();
     }
 
-    return { placeSymbol };
+    function updateScore(player) {
+        const score = player.getScore();
+        const scoreboard = document.querySelector(
+            `#p${player.getId()}`
+        );
+        const scoreDOM = scoreboard.querySelector("[data-score]");
+        scoreDOM.textContent = score;
+    }
+
+    return { placeSymbol, updateScore };
 })();
 
 function playerFactory(name, symbol, id) {
-    const _score = 0;
+    let _score = 0;
 
     function getName() {
         return name;
@@ -51,7 +59,12 @@ function playerFactory(name, symbol, id) {
         return id;
     }
 
-    return { getName, getSymbol, getScore, getId };
+    function updateScore() {
+        _score++;
+        displayController.updateScore(this);
+    }
+
+    return { getName, getSymbol, getScore, getId, updateScore };
 }
 
-const player1 = playerFactory("John", "x");
+const player1 = playerFactory("John", "x", "2");
