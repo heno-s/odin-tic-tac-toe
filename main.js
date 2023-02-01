@@ -27,9 +27,6 @@ form.addEventListener("submit", (evt) => {
         id: "2",
     };
     game.init(player1, player2);
-
-    form.classList.add("hide");
-    main.classList.remove("hide");
 });
 
 const gameboard = (function () {
@@ -92,6 +89,9 @@ const displayController = (function () {
         scoreboard2.querySelector("[data-score]").textContent = "0";
         scoreboard2.querySelector("[data-symbol]").textContent =
             player2.symbol;
+
+        form.classList.add("hide");
+        main.classList.remove("hide");
     }
 
     function clearBoard() {
