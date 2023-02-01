@@ -32,7 +32,7 @@ const displayController = (function () {
     return { placeSymbol };
 })();
 
-function playerFactory(name, symbol) {
+function playerFactory(name, symbol, id) {
     const _score = 0;
 
     function getName() {
@@ -47,7 +47,11 @@ function playerFactory(name, symbol) {
         return _score;
     }
 
-    return { getName, getSymbol, getScore };
+    function getId() {
+        return id;
+    }
+
+    return { getName, getSymbol, getScore, getId };
 }
 
 const player1 = playerFactory("John", "x");
