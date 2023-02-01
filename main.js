@@ -1,5 +1,13 @@
 const form = document.forms[0];
 const main = document.querySelector("main");
+const gameboardDOM = document.querySelector(".gameboard");
+gameboardDOM.addEventListener("click", (evt) => {
+    const t = evt.target;
+    if (!t.classList.contains("tile")) {
+        return null;
+    }
+    game.playTurn(t.dataset.index);
+});
 form.addEventListener("submit", (evt) => {
     evt.preventDefault();
 
@@ -95,6 +103,41 @@ const game = (function () {
     let _player2;
     let _turningPlayer;
 
+    function playTurn(index) {
+        if (!gameboard.placeSymbol(_turningPlayer, index)) {
+            return false;
+        }
+
+        if (_isGameEnd()) {
+            if (_findWinCombination()) {
+                const winner = _findWinner();
+                winner.updateScore();
+            }
+            gameboard.clear();
+        }
+        _switchPlayer();
+        return true;
+    }
+
+    function _switchPlayer() {
+        if (_turningPlayer === _player1) {
+            _turningPlayer = _player2;
+        } else {
+            _turningPlayer = _player1;
+        }
+    }
+
+    function _isGameEnd() {
+        const board = gameboard.getBoard();
+        if (
+            _findWinCombination() ||
+            board.every((tile) => tile !== null)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     function _findWinner() {
         const winnerCombination = _findWinCombination();
         if (!winnerCombination) {
@@ -157,7 +200,7 @@ const game = (function () {
         displayController.init(player1, player2);
     }
 
-    return { init };
+    return { init, playTurn };
 })();
 
 function playerFactory(name, symbol, id) {
