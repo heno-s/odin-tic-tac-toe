@@ -38,7 +38,14 @@ const gameboard = (function () {
         return [..._gameboard];
     }
 
-    return { placeSymbol, getBoard };
+    function clear() {
+        for (let i = 0; i < 9; i++) {
+            _gameboard[i] = null;
+        }
+        displayController.clearBoard();
+    }
+
+    return { placeSymbol, getBoard, clear };
 })();
 
 const displayController = (function () {
@@ -74,7 +81,13 @@ const displayController = (function () {
             player2.symbol;
     }
 
-    return { placeSymbol, updateScore, init };
+    function clearBoard() {
+        [...gameboardDOM.children].forEach(
+            (tile) => (tile.textContent = "")
+        );
+    }
+
+    return { placeSymbol, updateScore, init, clearBoard };
 })();
 
 const game = (function () {
@@ -82,7 +95,20 @@ const game = (function () {
     let _player2;
     let _turningPlayer;
 
-    function _isWinner() {
+    function _findWinner() {
+        const winnerCombination = _findWinCombination();
+        if (!winnerCombination) {
+            return null;
+        }
+        const symbol = winnerCombination[0];
+        if (_player1.getSymbol() === symbol) {
+            return _player1;
+        } else {
+            return _player2;
+        }
+    }
+
+    function _findWinCombination() {
         const combinations = [
             ..._splitBoard(0, 1, 3, 3), // rows
             ..._splitBoard(0, 3, 1, 3), // columns
@@ -90,9 +116,11 @@ const game = (function () {
             ..._splitBoard(2, 2, 0, 1), // diagonal to left
         ];
 
-        return combinations.some((combination) => {
+        return combinations.find((combination) => {
             const symbol = combination[0];
-            return combination.every((symb) => symb === symbol);
+            return combination.every(
+                (symb) => symb === symbol && symbol !== null
+            );
         });
     }
 
