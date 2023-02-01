@@ -20,21 +20,25 @@ form.addEventListener("submit", (evt) => {
 });
 
 const gameboard = (function () {
-    const gameboard = [];
+    const _gameboard = [];
     for (let i = 0; i < 9; i++) {
-        gameboard[i] = null;
+        _gameboard[i] = null;
     }
     function placeSymbol(player, index) {
         const symbol = player.getSymbol();
-        if (gameboard[index] !== null) {
+        if (_gameboard[index] !== null) {
             return false;
         }
-        gameboard[index] = symbol;
+        _gameboard[index] = symbol;
         displayController.placeSymbol(player, index);
         return true;
     }
 
-    return { placeSymbol };
+    function getBoard() {
+        return [..._gameboard];
+    }
+
+    return { placeSymbol, getBoard };
 })();
 
 const displayController = (function () {
@@ -78,6 +82,37 @@ const game = (function () {
     let _player2;
     let _turningPlayer;
 
+    function _isWinner() {
+        const combinations = [
+            ..._splitBoard(0, 1, 3, 3), // rows
+            ..._splitBoard(0, 3, 1, 3), // columns
+            ..._splitBoard(0, 4, 0, 1), // diagonal to right
+            ..._splitBoard(2, 2, 0, 1), // diagonal to left
+        ];
+
+        return combinations.some((combination) => {
+            const symbol = combination[0];
+            return combination.every((symb) => symb === symbol);
+        });
+    }
+
+    function _splitBoard(startIndex, step, moveBy, numberOfChunks) {
+        const board = gameboard.getBoard();
+        const modifiedBoard = [];
+        let counter = 0;
+        let index = startIndex;
+        while (counter < numberOfChunks) {
+            modifiedBoard.push([
+                board[index],
+                board[index + step],
+                board[index + step * 2],
+            ]);
+            index += moveBy;
+            counter++;
+        }
+        return modifiedBoard;
+    }
+
     function init(player1, player2) {
         _player1 = playerFactory(
             player1.name,
@@ -93,6 +128,7 @@ const game = (function () {
 
         displayController.init(player1, player2);
     }
+
     return { init };
 })();
 
@@ -122,5 +158,3 @@ function playerFactory(name, symbol, id) {
 
     return { getName, getSymbol, getScore, getId, updateScore };
 }
-
-const player1 = playerFactory("John", "x", "2");
