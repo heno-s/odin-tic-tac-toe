@@ -1,6 +1,11 @@
 const form = document.forms[0];
 const main = document.querySelector("main");
 const gameboardDOM = document.querySelector(".gameboard");
+const restart = document.querySelector(".restart button");
+
+restart.addEventListener("click", (evt) => {
+    game.restart();
+});
 gameboardDOM.addEventListener("click", (evt) => {
     const t = evt.target;
     if (!t.classList.contains("tile")) {
@@ -95,7 +100,12 @@ const displayController = (function () {
         );
     }
 
-    return { placeSymbol, updateScore, init, clearBoard };
+    function restart() {
+        main.classList.add("hide");
+        form.classList.remove("hide");
+    }
+
+    return { placeSymbol, updateScore, init, clearBoard, restart };
 })();
 
 const game = (function () {
@@ -200,7 +210,15 @@ const game = (function () {
         displayController.init(player1, player2);
     }
 
-    return { init, playTurn };
+    function restart() {
+        _player1 = null;
+        _player1 = null;
+        _turningPlayer = null;
+        gameboard.clear();
+        displayController.restart();
+    }
+
+    return { init, playTurn, restart };
 })();
 
 function playerFactory(name, symbol, id) {
