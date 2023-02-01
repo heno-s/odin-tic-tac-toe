@@ -30,6 +30,7 @@ const gameboard = (function () {
             return false;
         }
         gameboard[index] = symbol;
+        displayController.placeSymbol(player, index);
         return true;
     }
 
@@ -40,9 +41,6 @@ const displayController = (function () {
     const gameboardDOM = document.querySelector(".gameboard");
 
     function placeSymbol(player, index) {
-        if (!gameboard.placeSymbol(player, index)) {
-            return null;
-        }
         const tile = gameboardDOM.querySelector(
             `[data-index="${index}"]`
         );
