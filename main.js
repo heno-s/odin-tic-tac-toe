@@ -29,6 +29,20 @@ form.addEventListener("submit", (evt) => {
     game.init(player1, player2);
 });
 
+form.addEventListener("click", (evt) => {
+    const t = evt.target;
+    if (
+        t.nodeName !== "INPUT" ||
+        (t.nodeName === "INPUT" && t.type !== "radio")
+    ) {
+        return null;
+    }
+    const oppositeSymbol = document.querySelector(
+        `#${t.dataset.oppositeSymbol}`
+    );
+    oppositeSymbol.checked = true;
+});
+
 const gameboard = (function () {
     const _gameboard = [];
     for (let i = 0; i < 9; i++) {
