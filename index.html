@@ -15,7 +15,7 @@
             <h1>Tic Tac Toe</h1>
         </header>
 
-        <form class="hide">
+        <form>
             <div class="player-setup">
                 <input
                     class="player-name"
@@ -77,7 +77,7 @@
             <button class="submit" id="submit">start</button>
         </form>
 
-        <main>
+        <main class="hide">
             <div class="game">
                 <div class="scoreboard" id="p1">
                     <div class="name">Player 1</div>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="scoreboard-row">
                             <span>symbol:</span>
-                            <spanl>x</spanl>
+                            <span data-symbol>x</span>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                         </div>
                         <div class="scoreboard-row">
                             <span>symbol:</span>
-                            <span>o</span>
+                            <span data-symbol>o</span>
                         </div>
                     </div>
                 </div>
