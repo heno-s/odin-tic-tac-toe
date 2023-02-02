@@ -6,6 +6,7 @@ const restart = document.querySelector(".restart button");
 restart.addEventListener("click", (evt) => {
     game.restart();
 });
+
 gameboardDOM.addEventListener("click", (evt) => {
     const t = evt.target;
     if (!t.classList.contains("tile")) {
@@ -13,6 +14,7 @@ gameboardDOM.addEventListener("click", (evt) => {
     }
     game.playTurn(t.dataset.index);
 });
+
 form.addEventListener("submit", (evt) => {
     evt.preventDefault();
 
@@ -31,23 +33,21 @@ form.addEventListener("submit", (evt) => {
 
 form.addEventListener("click", (evt) => {
     const t = evt.target;
-    if (
-        t.nodeName !== "INPUT" ||
-        (t.nodeName === "INPUT" && t.type !== "radio")
-    ) {
-        return null;
+    if (t.nodeName === "INPUT" && t.type === "radio") {
+        const oppositeSymbol = document.querySelector(
+            `#${t.dataset.oppositeSymbol}`
+        );
+        oppositeSymbol.checked = true;
     }
-    const oppositeSymbol = document.querySelector(
-        `#${t.dataset.oppositeSymbol}`
-    );
-    oppositeSymbol.checked = true;
 });
 
 const gameboard = (function () {
     const _gameboard = [];
+
     for (let i = 0; i < 9; i++) {
         _gameboard[i] = null;
     }
+
     function placeSymbol(player, index) {
         const symbol = player.getSymbol();
         if (_gameboard[index] !== null) {
@@ -94,17 +94,19 @@ const displayController = (function () {
     function init(player1, player2) {
         const [scoreboard1, scoreboard2] =
             document.querySelectorAll(".scoreboard");
-        scoreboard1.id = `p${player1.id}`;
-        scoreboard2.id = `p${player2.id}`;
+        scoreboard1.id = `p${player1.getId()}`;
+        scoreboard2.id = `p${player2.getId()}`;
 
-        scoreboard1.querySelector(".name").textContent = player1.name;
+        scoreboard1.querySelector(".name").textContent =
+            player1.getName();
         scoreboard1.querySelector("[data-score]").textContent = "0";
         scoreboard1.querySelector("[data-symbol]").textContent =
-            player1.symbol;
-        scoreboard2.querySelector(".name").textContent = player2.name;
+            player1.getSymbol();
+        scoreboard2.querySelector(".name").textContent =
+            player2.getName();
         scoreboard2.querySelector("[data-score]").textContent = "0";
         scoreboard2.querySelector("[data-symbol]").textContent =
-            player2.symbol;
+            player2.getSymbol();
 
         form.classList.add("hide");
         main.classList.remove("hide");
@@ -141,6 +143,7 @@ const game = (function () {
             }
             gameboard.clear();
         }
+
         _switchPlayer();
         return true;
     }
@@ -223,12 +226,12 @@ const game = (function () {
         );
         _turningPlayer = Math.random() > 0.5 ? _player1 : _player2;
 
-        displayController.init(player1, player2);
+        displayController.init(_player1, _player2);
     }
 
     function restart() {
         _player1 = null;
-        _player1 = null;
+        _player2 = null;
         _turningPlayer = null;
         gameboard.clear();
         displayController.restart();
