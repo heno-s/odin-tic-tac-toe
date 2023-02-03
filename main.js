@@ -125,6 +125,9 @@ const displayController = (function () {
     }
 
     function restart() {
+        [...document.querySelectorAll(".scoreboard")].forEach(
+            (scoreboard) => scoreboard.classList.remove("turning")
+        );
         main.classList.add("hide");
         form.classList.remove("hide");
     }
