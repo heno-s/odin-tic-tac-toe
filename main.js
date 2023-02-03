@@ -91,7 +91,7 @@ const displayController = (function () {
         scoreDOM.textContent = score;
     }
 
-    function init(player1, player2) {
+    function init(player1, player2, turningPlayer) {
         const [scoreboard1, scoreboard2] =
             document.querySelectorAll(".scoreboard");
         scoreboard1.id = `p${player1.getId()}`;
@@ -108,6 +108,12 @@ const displayController = (function () {
         scoreboard2.querySelector("[data-symbol]").textContent =
             player2.getSymbol();
 
+        if (player1 === turningPlayer) {
+            scoreboard1.classList.add("turning");
+        } else {
+            scoreboard2.classList.add("turning");
+        }
+
         form.classList.add("hide");
         main.classList.remove("hide");
     }
@@ -123,7 +129,25 @@ const displayController = (function () {
         form.classList.remove("hide");
     }
 
-    return { placeSymbol, updateScore, init, clearBoard, restart };
+    function switchPlayer(turningPlayer) {
+        const scoreboard = document.querySelector(
+            `#p${turningPlayer.getId()}`
+        );
+        const scoreboard2 = document.querySelector(
+            `.scoreboard:not(#p${turningPlayer.getId()})`
+        );
+        scoreboard.classList.add("turning");
+        scoreboard2.classList.remove("turning");
+    }
+
+    return {
+        placeSymbol,
+        updateScore,
+        init,
+        clearBoard,
+        restart,
+        switchPlayer,
+    };
 })();
 
 const game = (function () {
@@ -154,6 +178,7 @@ const game = (function () {
         } else {
             _turningPlayer = _player1;
         }
+        displayController.switchPlayer(_turningPlayer);
     }
 
     function _isGameEnd() {
@@ -226,7 +251,7 @@ const game = (function () {
         );
         _turningPlayer = Math.random() > 0.5 ? _player1 : _player2;
 
-        displayController.init(_player1, _player2);
+        displayController.init(_player1, _player2, _turningPlayer);
     }
 
     function restart() {
